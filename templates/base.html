@@ -1,0 +1,181 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}F2 Hotel & Apartment — Kumasi, Ghana{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}F2 Hotel and Apartment — Luxury stay in Akom, Kumasi. Modern rooms, restaurant, pool, and more.{% endblock %}">
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar d-none d-md-block">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center py-2">
+      <div class="d-flex gap-4 small">
+        <span><i class="fas fa-map-marker-alt me-1"></i> Akom, Off Offinso Rd, Kumasi, Ashanti, Ghana</span>
+        <span><i class="fas fa-phone me-1"></i> +233 XX XXX XXXX</span>
+        <span><i class="fas fa-envelope me-1"></i> info@f2hotel.com</span>
+      </div>
+      <div class="d-flex gap-3 small">
+        <a href="https://wa.me/233XXXXXXXXX" target="_blank" class="text-white text-decoration-none"><i class="fab fa-whatsapp me-1"></i>WhatsApp</a>
+        <a href="#" class="text-white text-decoration-none"><i class="fab fa-facebook me-1"></i></a>
+        <a href="#" class="text-white text-decoration-none"><i class="fab fa-instagram me-1"></i></a>
+        <a href="#" class="text-white text-decoration-none"><i class="fab fa-twitter me-1"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top" id="mainNav">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'website:home' %}">
+      <div class="brand-icon"><span>F2</span></div>
+      <div>
+        <div class="brand-name">F2 Hotel</div>
+        <div class="brand-tagline">& Apartment</div>
+      </div>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'website:home' %}">Home</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'website:about' %}">About</a></li>
+        <li class="nav-item"><a class="nav-link {% if 'rooms' in request.path %}active{% endif %}" href="{% url 'rooms:list' %}">Rooms</a></li>
+        <li class="nav-item"><a class="nav-link {% if 'gallery' in request.path %}active{% endif %}" href="{% url 'rooms:gallery' %}">Gallery</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'website:contact' %}">Contact</a></li>
+      </ul>
+      <div class="d-flex align-items-center gap-2">
+        {% if user.is_authenticated %}
+          <div class="dropdown">
+            <button class="btn btn-sm btn-outline-light dropdown-toggle" data-bs-toggle="dropdown">
+              <i class="fas fa-user-circle me-1"></i> {{ user.first_name|default:user.username }}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="{% url 'accounts:dashboard' %}"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
+              <li><a class="dropdown-item" href="{% url 'accounts:profile' %}"><i class="fas fa-user me-2"></i>My Profile</a></li>
+              {% if user.is_staff %}
+              <li><a class="dropdown-item" href="/admin/"><i class="fas fa-cog me-2"></i>Admin Panel</a></li>
+              {% endif %}
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="{% url 'accounts:logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+            </ul>
+          </div>
+        {% else %}
+          <a href="{% url 'accounts:login' %}" class="btn btn-sm btn-outline-light">Login</a>
+          <a href="{% url 'accounts:register' %}" class="btn btn-sm btn-gold">Register</a>
+        {% endif %}
+        <a href="{% url 'rooms:list' %}" class="btn btn-sm btn-gold ms-1 d-none d-lg-inline-flex">
+          <i class="fas fa-calendar-check me-1"></i> Book Now
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- MESSAGES -->
+{% if messages %}
+<div class="container mt-3">
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show shadow-sm" role="alert">
+    <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' or message.tags == 'danger' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %} me-2"></i>
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- PAGE CONTENT -->
+{% block content %}{% endblock %}
+
+<!-- FOOTER -->
+<footer class="footer mt-auto">
+  <div class="footer-top">
+    <div class="container">
+      <div class="row g-5">
+        <div class="col-lg-4">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <div class="brand-icon"><span>F2</span></div>
+            <div>
+              <div class="brand-name text-white">F2 Hotel</div>
+              <div class="brand-tagline" style="color:var(--gold);">& Apartment</div>
+            </div>
+          </div>
+          <p class="text-muted small">Experience unmatched comfort and luxury at F2 Hotel and Apartment. Your home away from home in the heart of Kumasi, Ghana.</p>
+          <div class="d-flex gap-3 mt-3">
+            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="https://wa.me/233XXXXXXXXX" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-4">
+          <h6 class="footer-heading">Quick Links</h6>
+          <ul class="list-unstyled footer-links">
+            <li><a href="{% url 'website:home' %}">Home</a></li>
+            <li><a href="{% url 'website:about' %}">About Us</a></li>
+            <li><a href="{% url 'rooms:list' %}">Our Rooms</a></li>
+            <li><a href="{% url 'rooms:gallery' %}">Gallery</a></li>
+            <li><a href="{% url 'website:contact' %}">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-2 col-md-4">
+          <h6 class="footer-heading">Room Types</h6>
+          <ul class="list-unstyled footer-links">
+            <li><a href="{% url 'rooms:list' %}?type=standard">Standard Room</a></li>
+            <li><a href="{% url 'rooms:list' %}?type=deluxe">Deluxe Room</a></li>
+            <li><a href="{% url 'rooms:list' %}?type=executive">Executive Room</a></li>
+            <li><a href="{% url 'rooms:list' %}?type=family">Family Room</a></li>
+            <li><a href="{% url 'rooms:list' %}?type=apartment">Apartment</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-4 col-md-4">
+          <h6 class="footer-heading">Contact Us</h6>
+          <ul class="list-unstyled footer-contact">
+            <li><i class="fas fa-map-marker-alt"></i><span>Akom, Custom Check Point, Off Offinso Road, Ashanti Region, Ghana</span></li>
+            <li><i class="fas fa-phone"></i><span>+233 XX XXX XXXX</span></li>
+            <li><i class="fas fa-envelope"></i><span>info@f2hotel.com</span></li>
+            <li><i class="fas fa-clock"></i><span>24/7 Front Desk Available</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <p class="mb-0 small text-muted">&copy; {% now "Y" %} F2 Hotel & Apartment. All rights reserved.</p>
+        <p class="mb-0 small text-muted">Akom, Kumasi — Ashanti Region, Ghana</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- WhatsApp Floating Button -->
+<a href="https://wa.me/233XXXXXXXXX?text=Hello%20F2%20Hotel!%20I%20would%20like%20to%20make%20an%20enquiry." 
+   class="whatsapp-float" target="_blank" title="Chat with us on WhatsApp">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Custom JS -->
+<script src="{% static 'js/main.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

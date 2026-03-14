@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% block title %}My Dashboard — F2 Hotel{% endblock %}
+{% block content %}
+<div class="page-hero" style="padding:50px 0;">
+  <div class="container position-relative">
+    <h1 class="section-title light mb-1">My Dashboard</h1>
+    <p class="text-muted">Welcome back, <strong class="text-gold">{{ user.first_name|default:user.username }}</strong></p>
+  </div>
+</div>
+
+<section class="section-pad">
+  <div class="container">
+    <div class="row g-4">
+
+      <!-- Sidebar -->
+      <div class="col-lg-3">
+        <div class="dashboard-sidebar">
+          <div class="text-center mb-4">
+            <div style="width:64px;height:64px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:1.5rem;color:var(--dark);">
+              {{ user.first_name.0|default:user.username.0|upper }}
+            </div>
+            <div class="fw-600">{{ user.get_full_name|default:user.username }}</div>
+            <div class="small" style="color:var(--gold);">{{ user.email }}</div>
+          </div>
+          <nav>
+            <a href="{% url 'accounts:dashboard' %}" class="dashboard-nav-link active">
+              <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a href="{% url 'accounts:profile' %}" class="dashboard-nav-link">
+              <i class="fas fa-user"></i> My Profile
+            </a>
+            <a href="{% url 'rooms:list' %}" class="dashboard-nav-link">
+              <i class="fas fa-bed"></i> Book a Room
+            </a>
+            <a href="{% url 'website:contact' %}" class="dashboard-nav-link">
+              <i class="fas fa-headset"></i> Support
+            </a>
+            <a href="{% url 'accounts:logout' %}" class="dashboard-nav-link" style="color:#ff6b6b;">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="col-lg-9">
+
+        <!-- Stats Cards -->
+        <div class="row g-3 mb-4">
+          <div class="col-sm-4">
+            <div class="stat-card">
+              <div class="text-muted small mb-1"><i class="fas fa-calendar-check me-1"></i>Total Bookings</div>
+              <div class="stat-num">{{ total_bookings }}</div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="stat-card border-success">
+              <div class="text-muted small mb-1"><i class="fas fa-check-circle me-1"></i>Confirmed</div>
+              <div class="stat-num">{{ confirmed_bookings }}</div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="stat-card border-info">
+              <div class="text-muted small mb-1"><i class="fas fa-clock me-1"></i>Active</div>
+              <div class="stat-num">{{ active_bookings|length }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active Bookings -->
+        <div class="mb-5">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="font-display fw-600 mb-0">Active Bookings</h5>
+            <a href="{% url 'rooms:list' %}" class="btn btn-sm btn-gold">
+              <i class="fas fa-plus me-1"></i>New Booking
+            </a>
+          </div>
+
+          {% if active_bookings %}
+            {% for booking in active_bookings %}
+            <div class="booking-item mb-3">
+              {% if booking.room.image %}
+                <img src="{{ booking.room.image.url }}" alt="{{ booking.room.name }}" class="booking-item-img">
+              {% else %}
+                <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=200&q=80" alt="{{ booking.room.name }}" class="booking-item-img">
+              {% endif %}
+              <div class="flex-grow-1">
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                  <div>
+                    <div class="fw-600">{{ booking.room.name }}</div>
+                    <div class="text-muted small">{{ booking.room.get_room_type_display }}</div>
+                  </div>
+                  <span class="booking-status status-{{ booking.status }}">{{ booking.get_status_display }}</span>
+                </div>
+                <div class="d-flex flex-wrap gap-3 mt-2 small text-muted">
+                  <span><i class="fas fa-calendar-alt me-1"></i>{{ booking.check_in|date:"d M Y" }}</span>
+                  <span><i class="fas fa-arrow-right me-1"></i>{{ booking.check_out|date:"d M Y" }}</span>
+                  <span><i class="fas fa-moon me-1"></i>{{ booking.nights }} nights</span>
+                  <span><i class="fas fa-users me-1"></i>{{ booking.guests }} guests</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                  <span class="fw-600 text-gold">GHS {{ booking.total_price }}</span>
+                  <div class="d-flex gap-2">
+                    {% if booking.status == 'pending' %}
+                    <a href="{% url 'payments:initiate' booking.pk %}" class="btn btn-sm btn-gold">Pay Now</a>
+                    {% endif %}
+                    <a href="{% url 'bookings:detail' booking.pk %}" class="btn btn-sm btn-outline-dark">View</a>
+                    {% if booking.can_cancel %}
+                    <form method="POST" action="{% url 'bookings:cancel' booking.pk %}" class="d-inline">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-outline-danger"
+                        onclick="return confirm('Cancel this booking?')">Cancel</button>
+                    </form>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <div class="text-center py-5 bg-off-white rounded-hotel">
+              <i class="fas fa-calendar-times text-muted" style="font-size:3rem;"></i>
+              <p class="text-muted mt-3 mb-3">No active bookings yet.</p>
+              <a href="{% url 'rooms:list' %}" class="btn btn-gold">Book a Room</a>
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Past Bookings -->
+        {% if past_bookings %}
+        <div>
+          <h5 class="font-display fw-600 mb-3">Booking History</h5>
+          {% for booking in past_bookings %}
+          <div class="booking-item mb-3" style="opacity:0.75;">
+            {% if booking.room.image %}
+              <img src="{{ booking.room.image.url }}" alt="{{ booking.room.name }}" class="booking-item-img">
+            {% else %}
+              <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=200&q=80" alt="{{ booking.room.name }}" class="booking-item-img">
+            {% endif %}
+            <div class="flex-grow-1">
+              <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                <div>
+                  <div class="fw-600">{{ booking.room.name }}</div>
+                  <div class="text-muted small">Ref: {{ booking.booking_reference }}</div>
+                </div>
+                <span class="booking-status status-{{ booking.status }}">{{ booking.get_status_display }}</span>
+              </div>
+              <div class="d-flex flex-wrap gap-3 mt-2 small text-muted">
+                <span>{{ booking.check_in|date:"d M Y" }} → {{ booking.check_out|date:"d M Y" }}</span>
+                <span>{{ booking.nights }} nights</span>
+                <span class="fw-600 text-dark">GHS {{ booking.total_price }}</span>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

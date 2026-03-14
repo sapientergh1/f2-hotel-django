@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Page Not Found — F2 Hotel{% endblock %}
+{% block content %}
+<section style="min-height:75vh; background:var(--off-white); display:flex; align-items:center;">
+  <div class="container text-center py-5">
+    <div style="font-family:var(--font-display); font-size:clamp(6rem,18vw,12rem); font-weight:700; line-height:1; color:var(--gold); opacity:0.25;">404</div>
+    <h2 class="font-display fw-700 mt-n3 mb-3" style="margin-top:-2rem;">Page Not Found</h2>
+    <p class="text-muted mb-4 mx-auto" style="max-width:400px;">
+      The page you're looking for doesn't exist or may have been moved. Let us guide you back.
+    </p>
+    <div class="d-flex flex-wrap justify-content-center gap-3">
+      <a href="{% url 'website:home' %}" class="btn btn-gold btn-lg px-4">
+        <i class="fas fa-home me-2"></i> Back to Home
+      </a>
+      <a href="{% url 'rooms:list' %}" class="btn btn-outline-dark btn-lg px-4">
+        <i class="fas fa-bed me-2"></i> Browse Rooms
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}

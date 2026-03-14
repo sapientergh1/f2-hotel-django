@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block title %}Complete Payment — F2 Hotel{% endblock %}
+{% block content %}
+
+<section class="py-5" style="background:var(--off-white); min-height:80vh;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+
+        <div class="payment-card">
+          <!-- Header -->
+          <div class="payment-header">
+            <div class="brand-icon mx-auto mb-3"><span>F2</span></div>
+            <h4 class="font-display mb-1">Complete Your Booking</h4>
+            <p class="text-muted small mb-0">Secure payment powered by Paystack</p>
+          </div>
+
+          <div class="p-4">
+            <!-- Booking Summary -->
+            <div class="bg-off-white rounded-3 p-3 mb-4">
+              <div class="d-flex gap-3 align-items-center mb-3">
+                {% if booking.room.image %}
+                  <img src="{{ booking.room.image.url }}" alt="{{ booking.room.name }}" class="rounded-3" style="width:70px;height:70px;object-fit:cover;">
+                {% else %}
+                  <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=200&q=80" alt="{{ booking.room.name }}" class="rounded-3" style="width:70px;height:70px;object-fit:cover;">
+                {% endif %}
+                <div>
+                  <div class="fw-600">{{ booking.room.name }}</div>
+                  <div class="text-muted small">{{ booking.room.get_room_type_display }}</div>
+                  <div class="text-muted small">Ref: <strong class="text-gold">{{ booking.booking_reference }}</strong></div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-between small border-top pt-2 mb-1">
+                <span class="text-muted"><i class="fas fa-calendar-alt me-1"></i> Check-in</span>
+                <span class="fw-500">{{ booking.check_in|date:"d M Y" }}</span>
+              </div>
+              <div class="d-flex justify-content-between small mb-1">
+                <span class="text-muted"><i class="fas fa-calendar-check me-1"></i> Check-out</span>
+                <span class="fw-500">{{ booking.check_out|date:"d M Y" }}</span>
+              </div>
+              <div class="d-flex justify-content-between small mb-1">
+                <span class="text-muted"><i class="fas fa-moon me-1"></i> Nights</span>
+                <span class="fw-500">{{ booking.nights }}</span>
+              </div>
+              <div class="d-flex justify-content-between small mb-1">
+                <span class="text-muted"><i class="fas fa-users me-1"></i> Guests</span>
+                <span class="fw-500">{{ booking.guests }}</span>
+              </div>
+              <div class="d-flex justify-content-between fw-700 border-top pt-2 mt-2">
+                <span>Total Amount</span>
+                <span class="text-gold" style="font-size:1.1rem;">GHS {{ booking.total_price }}</span>
+              </div>
+            </div>
+
+            <!-- Guest Info -->
+            <div class="mb-4">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <i class="fas fa-user-circle text-gold"></i>
+                <span class="small fw-600">Paying as: {{ user.get_full_name|default:user.username }}</span>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <i class="fas fa-envelope text-gold"></i>
+                <span class="small text-muted">{{ user.email }}</span>
+              </div>
+            </div>
+
+            <!-- Paystack Payment Button -->
+            <button onclick="payWithPaystack()" class="paystack-btn mb-3">
+              <svg width="24" height="24" viewBox="0 0 40 40" fill="none">
+                <rect width="40" height="40" rx="8" fill="#0050C8"/>
+                <path d="M10 20h20M20 10v20" stroke="white" stroke-width="3" stroke-linecap="round"/>
+              </svg>
+              Pay GHS {{ booking.total_price }} with Paystack
+            </button>
+
+            <div class="text-center">
+              <div class="d-flex align-items-center justify-content-center gap-2 text-muted small mb-3">
+                <i class="fas fa-lock text-gold"></i>
+                <span>256-bit SSL encrypted · Your payment is 100% secure</span>
+              </div>
+              <div class="d-flex justify-content-center gap-3 mb-3">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/120px-Visa_Inc._logo.svg.png" height="20" alt="Visa">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/120px-Mastercard-logo.svg.png" height="20" alt="Mastercard">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Mobile_Money_logo.svg/120px-Mobile_Money_logo.svg.png" height="20" alt="Mobile Money" onerror="this.style.display='none'">
+              </div>
+            </div>
+
+            <div class="d-flex gap-2">
+              <a href="{% url 'bookings:detail' booking.pk %}" class="btn btn-outline-secondary w-100">
+                <i class="fas fa-arrow-left me-2"></i>Back
+              </a>
+              <a href="{% url 'payments:cancel' booking.pk %}" class="btn btn-outline-danger w-100">
+                <i class="fas fa-times me-2"></i>Cancel
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Paystack Inline JS -->
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script>
+function payWithPaystack() {
+  const handler = PaystackPop.setup({
+    key: '{{ paystack_public_key }}',
+    email: '{{ user.email }}',
+    amount: {{ amount_pesewas }},
+    currency: 'GHS',
+    ref: 'F2-' + Math.floor(Math.random() * 1000000000 + 1),
+    metadata: {
+      booking_reference: '{{ booking.booking_reference }}',
+      custom_fields: [
+        { display_name: "Booking Reference", variable_name: "booking_reference", value: "{{ booking.booking_reference }}" },
+        { display_name: "Room", variable_name: "room", value: "{{ booking.room.name }}" }
+      ]
+    },
+    callback: function(response) {
+      window.location.href = "{% url 'payments:verify' booking.pk %}?reference=" + response.reference;
+    },
+    onClose: function() {
+      console.log('Payment window closed');
+    }
+  });
+  handler.openIframe();
+}
+</script>
+{% endblock %}

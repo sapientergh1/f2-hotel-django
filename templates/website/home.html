@@ -1,0 +1,357 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}F2 Hotel & Apartment — Luxury Stay in Kumasi, Ghana{% endblock %}
+
+{% block content %}
+
+<!-- ════════════════ HERO ════════════════ -->
+<section class="hero-section">
+  <div class="hero-bg-image"></div>
+  <div class="hero-overlay"></div>
+  <div class="container hero-content py-5">
+    <div class="row align-items-center" style="min-height:85vh;">
+      <div class="col-lg-6">
+        <div class="hero-badge">
+          <i class="fas fa-star"></i> Premium Luxury Hotel · Kumasi, Ghana
+        </div>
+        <h1 class="hero-title">
+          Your Perfect
+          <span class="accent">Escape Awaits</span>
+        </h1>
+        <p class="hero-subtitle">
+          Experience world-class comfort and genuine Ghanaian hospitality at F2 Hotel & Apartment — nestled in the heart of Kumasi's Ashanti Region.
+        </p>
+        <div class="d-flex flex-wrap gap-3 mb-4">
+          <a href="{% url 'rooms:list' %}" class="btn btn-gold btn-lg px-4">
+            <i class="fas fa-bed me-2"></i> Explore Rooms
+          </a>
+          <a href="{% url 'website:about' %}" class="btn btn-outline-light btn-lg px-4">
+            <i class="fas fa-info-circle me-2"></i> About Us
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-num" data-counter data-target="5" data-suffix="+">5+</div>
+            <div class="hero-stat-label">Room Types</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num" data-counter data-target="500" data-suffix="+">500+</div>
+            <div class="hero-stat-label">Happy Guests</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num" data-counter data-target="10" data-suffix="+">10+</div>
+            <div class="hero-stat-label">Facilities</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">24/7</div>
+            <div class="hero-stat-label">Front Desk</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ BOOKING BAR ════════════════ -->
+<section class="py-0" style="background: var(--off-white);">
+  <div class="container">
+    <div class="booking-bar">
+      <form action="{% url 'rooms:list' %}" method="GET" id="heroSearchForm">
+        <div class="row g-3 align-items-end">
+          <div class="col-md-3">
+            <label class="form-label"><i class="fas fa-calendar-alt me-1"></i> Check-in</label>
+            <input type="date" name="check_in" class="form-control" required>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label"><i class="fas fa-calendar-check me-1"></i> Check-out</label>
+            <input type="date" name="check_out" class="form-control" required>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label"><i class="fas fa-users me-1"></i> Guests</label>
+            <select name="guests" class="form-select">
+              {% for i in "12345" %}
+                <option value="{{ i }}">{{ i }} Guest{{ i|pluralize }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label"><i class="fas fa-bed me-1"></i> Room Type</label>
+            <select name="type" class="form-select">
+              <option value="">All Types</option>
+              <option value="standard">Standard</option>
+              <option value="deluxe">Deluxe</option>
+              <option value="executive">Executive</option>
+              <option value="family">Family</option>
+              <option value="apartment">Apartment</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-gold w-100 py-2">
+              <i class="fas fa-search me-2"></i> Search
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ ABOUT SNIPPET ════════════════ -->
+<section class="section-pad bg-off-white">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-5 fade-up">
+        <div class="about-img-wrap pe-lg-3">
+          <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&q=80"
+               alt="F2 Hotel Lobby" class="about-img-main img-fluid rounded-hotel">
+          <div class="about-img-badge">
+            <span class="big-num">★ 4.8</span>
+            <span class="big-label">Guest Rating</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-7 fade-up">
+        <span class="section-tag">Welcome to F2 Hotel</span>
+        <h2 class="section-title">A World of Comfort<br>in the Heart of Kumasi</h2>
+        <div class="section-divider"></div>
+        <p class="text-muted mb-4">
+          F2 Hotel & Apartment is a modern, premier hospitality destination located at Akom, Custom Check Point, off the Offinso Road in Ghana's Ashanti Region. We blend contemporary comfort with authentic Ghanaian warmth to deliver an experience our guests never forget.
+        </p>
+        <ul class="check-list mb-4">
+          <li><i class="fas fa-check-circle"></i> Luxuriously appointed rooms and self-contained apartments</li>
+          <li><i class="fas fa-check-circle"></i> Gourmet restaurant and fully stocked bar on-site</li>
+          <li><i class="fas fa-check-circle"></i> Sparkling outdoor swimming pool and lounge area</li>
+          <li><i class="fas fa-check-circle"></i> Free parking and 24/7 professional front desk service</li>
+          <li><i class="fas fa-check-circle"></i> Complimentary high-speed WiFi throughout the property</li>
+        </ul>
+        <a href="{% url 'website:about' %}" class="btn btn-gold px-4">
+          Discover More <i class="fas fa-arrow-right ms-2"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ FEATURED ROOMS ════════════════ -->
+<section class="section-pad">
+  <div class="container">
+    <div class="text-center mb-5 fade-up">
+      <span class="section-tag">Our Accommodations</span>
+      <h2 class="section-title">Featured Rooms & Suites</h2>
+      <div class="section-divider centered"></div>
+      <p class="text-muted mx-auto" style="max-width:550px;">
+        Choose from our carefully curated selection of rooms and apartments, each designed for your utmost comfort and relaxation.
+      </p>
+    </div>
+    <div class="row g-4">
+      {% for room in featured_rooms %}
+      <div class="col-lg-4 col-md-6 fade-up">
+        <div class="room-card">
+          <div class="room-card-img">
+            {% if room.image %}
+              <img src="{{ room.image.url }}" alt="{{ room.name }}">
+            {% else %}
+              <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80" alt="{{ room.name }}">
+            {% endif %}
+            <div class="room-type-badge">{{ room.get_room_type_display }}</div>
+          </div>
+          <div class="room-card-body">
+            <h5 class="room-card-title">{{ room.name }}</h5>
+            <div class="room-meta">
+              <span class="room-meta-item"><i class="fas fa-users"></i> Up to {{ room.capacity }} guests</span>
+              <span class="room-meta-item"><i class="fas fa-expand-arrows-alt"></i> {{ room.size_sqm }}m²</span>
+              <span class="room-meta-item"><i class="fas fa-bed"></i> {{ room.bed_type }}</span>
+            </div>
+            <div class="room-amenities">
+              {% if room.has_wifi %}<span class="amenity-tag"><i class="fas fa-wifi"></i> WiFi</span>{% endif %}
+              {% if room.has_ac %}<span class="amenity-tag"><i class="fas fa-wind"></i> AC</span>{% endif %}
+              {% if room.has_tv %}<span class="amenity-tag"><i class="fas fa-tv"></i> TV</span>{% endif %}
+              {% if room.has_fridge %}<span class="amenity-tag"><i class="fas fa-snowflake"></i> Fridge</span>{% endif %}
+            </div>
+            <div class="room-price d-flex align-items-end justify-content-between">
+              <div>
+                <span class="price-amount"><span class="currency">GHS </span>{{ room.price_per_night }}</span>
+                <span class="price-per d-block">per night</span>
+              </div>
+              <a href="{% url 'rooms:detail' room.pk %}" class="btn btn-sm btn-gold px-3">
+                View Room
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center">
+        <p class="text-muted">No rooms available at the moment. Please check back soon.</p>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-5">
+      <a href="{% url 'rooms:list' %}" class="btn btn-outline-dark btn-lg px-5">
+        View All Rooms <i class="fas fa-arrow-right ms-2"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ AMENITIES ════════════════ -->
+<section class="section-pad bg-off-white">
+  <div class="container">
+    <div class="text-center mb-5 fade-up">
+      <span class="section-tag">Hotel Facilities</span>
+      <h2 class="section-title">Everything You Need</h2>
+      <div class="section-divider centered"></div>
+    </div>
+    <div class="row g-4">
+      {% for icon, title, desc in amenities_list %}
+      <div class="col-lg-3 col-md-4 col-sm-6 fade-up">
+        <div class="amenity-card">
+          <div class="amenity-icon"><i class="fas {{ icon }}"></i></div>
+          <h6>{{ title }}</h6>
+          <p>{{ desc }}</p>
+        </div>
+      </div>
+      {% endfor %}
+      <div class="col-lg-3 col-md-4 col-sm-6 fade-up">
+        <div class="amenity-card"><div class="amenity-icon"><i class="fas fa-utensils"></i></div><h6>Restaurant & Bar</h6><p>Enjoy Ghanaian and international cuisine with a fully stocked bar.</p></div>
+      </div>
+      <div class="col-lg-3 col-md-4 col-sm-6 fade-up">
+        <div class="amenity-card"><div class="amenity-icon"><i class="fas fa-swimming-pool"></i></div><h6>Swimming Pool</h6><p>Relax and unwind in our sparkling outdoor swimming pool.</p></div>
+      </div>
+      <div class="col-lg-3 col-md-4 col-sm-6 fade-up">
+        <div class="amenity-card"><div class="amenity-icon"><i class="fas fa-parking"></i></div><h6>Free Parking</h6><p>Complimentary secure parking for all hotel guests.</p></div>
+      </div>
+      <div class="col-lg-3 col-md-4 col-sm-6 fade-up">
+        <div class="amenity-card"><div class="amenity-icon"><i class="fas fa-concierge-bell"></i></div><h6>24/7 Front Desk</h6><p>Our dedicated team is available around the clock for your needs.</p></div>
+      </div>
+      <div class="col-lg-3 col-md-4 col-sm-6 fade-up">
+        <div class="amenity-card"><div class="amenity-icon"><i class="fas fa-wifi"></i></div><h6>Free WiFi</h6><p>High-speed internet access available throughout the hotel.</p></div>
+      </div>
+      <div class="col-lg-3 col-md-4 col-sm-6 fade-up">
+        <div class="amenity-card"><div class="amenity-icon"><i class="fas fa-tshirt"></i></div><h6>Laundry Service</h6><p>Professional laundry and dry-cleaning services available daily.</p></div>
+      </div>
+      <div class="col-lg-3 col-md-4 col-sm-6 fade-up">
+        <div class="amenity-card"><div class="amenity-icon"><i class="fas fa-shield-alt"></i></div><h6>24/7 Security</h6><p>Your safety is our priority with round-the-clock security personnel.</p></div>
+      </div>
+      <div class="col-lg-3 col-md-4 col-sm-6 fade-up">
+        <div class="amenity-card"><div class="amenity-icon"><i class="fas fa-wind"></i></div><h6>Air Conditioning</h6><p>All rooms are equipped with individual climate control systems.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ GALLERY PREVIEW ════════════════ -->
+<section class="section-pad">
+  <div class="container">
+    <div class="text-center mb-5 fade-up">
+      <span class="section-tag">Photo Gallery</span>
+      <h2 class="section-title">A Glimpse of F2 Hotel</h2>
+      <div class="section-divider centered"></div>
+    </div>
+    <div class="row g-3 fade-up">
+      <div class="col-lg-6 col-md-6">
+        <div class="gallery-item" style="height:320px;">
+          <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80" alt="Deluxe Room" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+          <div class="gallery-overlay"><span>Deluxe Room</span></div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="gallery-item mb-3" style="height:152px;">
+          <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&q=80" alt="Hotel Pool" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+          <div class="gallery-overlay"><span>Swimming Pool</span></div>
+        </div>
+        <div class="gallery-item" style="height:152px;">
+          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80" alt="Restaurant" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+          <div class="gallery-overlay"><span>Restaurant</span></div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="gallery-item mb-3" style="height:152px;">
+          <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600&q=80" alt="Executive Room" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+          <div class="gallery-overlay"><span>Executive Room</span></div>
+        </div>
+        <div class="gallery-item" style="height:152px;">
+          <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=600&q=80" alt="Hotel Exterior" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+          <div class="gallery-overlay"><span>Hotel Exterior</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-4">
+      <a href="{% url 'rooms:gallery' %}" class="btn btn-outline-dark btn-lg px-5">
+        View Full Gallery <i class="fas fa-images ms-2"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ TESTIMONIALS ════════════════ -->
+<section class="section-pad bg-off-white">
+  <div class="container">
+    <div class="text-center mb-5 fade-up">
+      <span class="section-tag">Guest Reviews</span>
+      <h2 class="section-title">What Our Guests Say</h2>
+      <div class="section-divider centered"></div>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4 fade-up">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"Exceptional stay! The rooms were spotless, the staff incredibly warm and helpful. The pool area is a perfect retreat after a long day. Will definitely return on my next visit to Kumasi."</p>
+          <div class="testimonial-author">
+            <img src="https://i.pravatar.cc/100?img=11" alt="Kofi A." class="testimonial-avatar">
+            <div><div class="testimonial-name">Kofi Asante</div><div class="testimonial-country"><i class="fas fa-map-marker-alt me-1"></i> Accra, Ghana</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 fade-up">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"The executive suite was absolutely stunning — modern design, super comfortable bed, and the room service was prompt. The restaurant serves amazing local dishes. Top-tier experience!"</p>
+          <div class="testimonial-author">
+            <img src="https://i.pravatar.cc/100?img=5" alt="Ama O." class="testimonial-avatar">
+            <div><div class="testimonial-name">Ama Owusu</div><div class="testimonial-country"><i class="fas fa-map-marker-alt me-1"></i> Kumasi, Ghana</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 fade-up">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★☆</div>
+          <p class="testimonial-text">"Great value for the quality offered. The family room comfortably fits our whole family. Free parking was very convenient. The location is easy to find off the Offinso Road."</p>
+          <div class="testimonial-author">
+            <img src="https://i.pravatar.cc/100?img=33" alt="James M." class="testimonial-avatar">
+            <div><div class="testimonial-name">James Mensah</div><div class="testimonial-country"><i class="fas fa-map-marker-alt me-1"></i> Takoradi, Ghana</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ CTA BANNER ════════════════ -->
+<section class="section-pad" style="background: linear-gradient(135deg, var(--dark) 0%, #1a1209 100%); position:relative; overflow:hidden;">
+  <div style="position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1400&q=80');background-size:cover;background-position:center;opacity:0.12;"></div>
+  <div class="container text-center position-relative">
+    <span class="section-tag text-center d-block">Limited Availability</span>
+    <h2 class="section-title light mb-3">Ready for an Unforgettable Stay?</h2>
+    <p class="text-muted mb-4 mx-auto" style="max-width:500px;">Book your room today and enjoy premium comfort, warm hospitality, and all the facilities you deserve.</p>
+    <div class="d-flex flex-wrap justify-content-center gap-3">
+      <a href="{% url 'rooms:list' %}" class="btn btn-gold btn-lg px-5">
+        <i class="fas fa-calendar-check me-2"></i> Book Your Stay
+      </a>
+      <a href="{% url 'website:contact' %}" class="btn btn-outline-light btn-lg px-5">
+        <i class="fas fa-phone me-2"></i> Contact Us
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Google Maps Location -->
+<section>
+  <iframe
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3962.558!2d-1.6232!3d6.6745!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNsKwNDAnMjguMiJOIDHCsDM3JzIzLjUiVw!5e0!3m2!1sen!2sgh!4v1234567890"
+    width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy">
+  </iframe>
+</section>
+
+{% endblock %}
