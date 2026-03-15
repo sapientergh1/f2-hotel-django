@@ -9,13 +9,14 @@ try:
 except ImportError:
     pass
 
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-f2hotel-dev-key-change-this-in-production-!!!')
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY',
+    'django-insecure-f2hotel-dev-key-change-this-in-production'
+)
+
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
-ALLOWED_HOSTS = [
-    "f2-hotel-django.onrender.com",
-    "localhost",
-    "127.0.0.1"
-]
+
+ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -24,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'accounts',
     'rooms',
     'bookings',
@@ -33,6 +35,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -52,15 +56,16 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'django.template.context_processors.media',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.media',
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'hotel_project.wsgi.application'
+
 
 DATABASES = {
     'default': {
@@ -69,6 +74,7 @@ DATABASES = {
     }
 }
 
+
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -76,26 +82,47 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/accounts/dashboard/'
 LOGOUT_REDIRECT_URL = '/'
+
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Africa/Accra'
 USE_I18N = True
 USE_TZ = True
 
+
+# Static files
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+
+# Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-PAYSTACK_SECRET_KEY = os.environ.get('PAYSTACK_SECRET_KEY', 'sk_test_06715c1f9e336d49acbec973c47b0590cec4798a')
-PAYSTACK_PUBLIC_KEY = os.environ.get('PAYSTACK_PUBLIC_KEY', 'pk_test_44bbaa2e4b3c8e2e5004a0bf0c774395337d845d')
 
+# Paystack
+PAYSTACK_SECRET_KEY = os.environ.get(
+    'PAYSTACK_SECRET_KEY',
+    'sk_test_06715c1f9e336d49acbec973c47b0590cec4798a'
+)
+
+PAYSTACK_PUBLIC_KEY = os.environ.get(
+    'PAYSTACK_PUBLIC_KEY',
+    'pk_test_44bbaa2e4b3c8e2e5004a0bf0c774395337d845d'
+)
+
+
+# Email settings
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
@@ -106,13 +133,19 @@ else:
     EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
     EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 
-DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'F2 Hotel <noreply@f2hotel.com>')
+DEFAULT_FROM_EMAIL = os.environ.get(
+    'DEFAULT_FROM_EMAIL',
+    'F2 Hotel <noreply@f2hotel.com>'
+)
 
+
+# Messages styling
 from django.contrib.messages import constants as msg_constants
+
 MESSAGE_TAGS = {
-    msg_constants.DEBUG:   'secondary',
-    msg_constants.INFO:    'info',
+    msg_constants.DEBUG: 'secondary',
+    msg_constants.INFO: 'info',
     msg_constants.SUCCESS: 'success',
     msg_constants.WARNING: 'warning',
-    msg_constants.ERROR:   'danger',
+    msg_constants.ERROR: 'danger',
 }
